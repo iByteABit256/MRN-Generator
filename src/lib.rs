@@ -12,8 +12,8 @@ pub fn replace_last_char(s: &str, c: char) -> String {
 }
 
 /// Remainder values according to tables in ISO 6346
-pub fn check_remainder_value(check_digit: u8, last_digit: char) -> bool {
-    if check_digit == 10 { last_digit == '0' } else { check_digit == last_digit as u8 - 48 }
+pub fn check_remainder_value(check_digit: u8, last_digit: char) -> Option<char> {
+    if check_digit % 10 != last_digit as u8 - 48 { Some(char::from_digit((check_digit % 10) as u32, 10)).unwrap() } else { None }
 }
 
 /// Character values according to tables in ISO 6346
@@ -45,10 +45,10 @@ mod tests {
 
     #[test]
     fn check_remainder_value_test() {
-        assert_eq!(true, check_remainder_value(3, '3'));
-        assert_eq!(true, check_remainder_value(10, '0'));
-        assert_eq!(false, check_remainder_value(3, '5'));
-        assert_eq!(false, check_remainder_value(10, '9'));
+        assert_eq!(None, check_remainder_value(3, '3'));
+        assert_eq!(None, check_remainder_value(10, '0'));
+        assert_eq!(Some('3'), check_remainder_value(3, '5'));
+        assert_eq!(Some('0'), check_remainder_value(10, '9'));
     }
 
     #[test]

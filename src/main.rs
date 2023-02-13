@@ -1,7 +1,10 @@
-use std::env;
+mod parser;
+
 use chrono::{Datelike,Utc};
+use clap::Parser;
 use rand::{distributions::{Alphanumeric}, prelude::Distribution};
 use mrn_generator::*;
+use parser::Args;
 
 /// Returns a valid MRN given a country code
 fn generate_random_mrn(country_code: &str) -> String {
@@ -31,14 +34,19 @@ fn is_mrn_valid(mrn: &str) -> Option<char> {
     let multiplied_sum: u32 = mrn_temp.chars().zip(multipliers).map(|(c,m)| check_character_value(c) as u32 * m).sum();
 
     let check_digit: u8 = (multiplied_sum % 11).try_into().unwrap();
-    if check_remainder_value(check_digit, last_digit) { None } else { Some(check_digit as char) }
+    check_remainder_value(check_digit, last_digit)
 }
 
 fn main() {
-    let country_code: &str = &env::args().skip(1).next().expect("Please provide a country code as argument. (e.g. DK)");
+    let args = Args::parse();
+    let country_code = args.country_code;
+    let iterations = args.number_of_mrns;
 
-    let mrn: &str = &generate_random_mrn(country_code);
-    println!("Here is your MRN: {}", mrn);
+    println!("Here are your MRN(s)\n");
+    for _ in 0..iterations {
+        let mrn: &str = &generate_random_mrn(&country_code);
+        println!("{mrn}");
+    }
 }
 
 #[cfg(test)]
@@ -61,7 +69,7 @@ mod tests {
     #[test]
     fn is_mrn_valid_test() {
         assert_eq!(None, is_mrn_valid("22ITZXBZYUTJFLJXK6"));
-        assert_eq!(Some('\u{1}'), is_mrn_valid("22DK1V0QQK2S6J7TU2"));
+        assert_eq!(Some('1'), is_mrn_valid("22DK1V0QQK2S6J7TU2"));
     }
 
 }
