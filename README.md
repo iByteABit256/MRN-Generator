@@ -68,4 +68,4 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Pavlos Smith - paulsmith4561+at+gmail.com.com
+Pavlos Smith - paulsmith4561+at+gmail.com
