@@ -28,10 +28,8 @@ fn is_mrn_valid(mrn: &str) -> Option<char> {
 
     let mrn_temp: String = mrn_iter.collect();
 
-    // Powers of 2
-    let multipliers: Vec<u32> = (0..mrn_temp.len()).map(|n| 1 << n).collect();
-
-    let multiplied_sum: u32 = mrn_temp.chars().zip(multipliers).map(|(c,m)| check_character_value(c) as u32 * m).sum();
+    // Multiply each char value with it's power of 2 and sum them
+    let multiplied_sum: u32 = mrn_temp.chars().zip(0..mrn_temp.len()).map(|(c,m)| (check_character_value(c) as u32) << m).sum();
 
     let check_digit: u8 = (multiplied_sum % 11).try_into().unwrap();
     check_remainder_value(check_digit, last_digit)
