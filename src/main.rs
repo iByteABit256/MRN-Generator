@@ -39,8 +39,7 @@ fn main() {
     let args = Args::parse();
     let country_code = args.country_code;
     let iterations = args.number_of_mrns;
-
-    println!("Here are your MRN(s)\n");
+    
     for _ in 0..iterations {
         let mrn: &str = &generate_random_mrn(&country_code);
         println!("{mrn}");
