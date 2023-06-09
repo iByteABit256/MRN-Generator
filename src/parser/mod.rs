@@ -12,7 +12,11 @@ pub struct Args {
     #[arg(short, long, default_value_t = 1)]
     pub number_of_mrns: usize,
 
-    /// Regime
+    /// Procedure category
     #[arg(short, long)]
-    pub regime: Option<String>,
+    pub procedure_category: Option<String>,
+
+    /// Combined procedure category
+    #[arg(short = 'C', long)]
+    pub combined: Option<String>,
 }

@@ -46,15 +46,23 @@ To build the project locally you will need to [Install Rust](https://www.rust-la
 mrn-generator [OPTIONS] --country-code <COUNTRY_CODE>
 
 Options:
-- -c, --country-code <COUNTRY_CODE>      Country code of MRN
-- -n, --number-of-mrns <NUMBER_OF_MRNS>  Number of MRNs to generate [default: 1]
-- -h, --help                             Print help
-- -V, --version                          Print version
+- -c, --country-code <COUNTRY_CODE>              Country code of MRN
+- -n, --number-of-mrns <NUMBER_OF_MRNS>          Number of MRNs to generate [default: 1]
+- -p, --procedure-category <PROCEDURE_CATEGORY>  Procedure category
+- -C, --combined <COMBINED>                      Combined procedure category
+- -h, --help                                     Print help
+- -V, --version                                  Print version
   
 ### Examples
 ```mrn-generator -c DK``` to generate an MRN with Denmark as a country code
 
 ```mrn-generator -c NL -n 20``` to generate 20 MRNs with Netherlands as a country code
+
+```mrn-generator -c NL -n 20 -P B1``` to generate 20 MRNs with Netherlands as a country code
+and B1 procedure category
+
+```mrn-generator -c NL -n 20 -P B1 -C A``` to generate 20 MRNs with Netherlands as a country code
+and B1 procedure category combined with A* procedure category
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

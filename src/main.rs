@@ -1,6 +1,6 @@
 mod parser;
 
-use std::{error::Error, str::FromStr};
+use std::error::Error;
 
 use chrono::{Datelike, Utc};
 use clap::Parser;
@@ -9,7 +9,7 @@ use parser::Args;
 use rand::{distributions::Alphanumeric, prelude::Distribution};
 
 /// Returns a valid MRN given a country code
-fn generate_random_mrn(country_code: &str, regime: Option<Regime>) -> String {
+fn generate_random_mrn(country_code: &str, procedure: Option<Procedure>) -> String {
     let curr_year: String = Utc::now().year().to_string().chars().skip(2).collect();
 
     let random_str: String = Alphanumeric
@@ -22,12 +22,14 @@ fn generate_random_mrn(country_code: &str, regime: Option<Regime>) -> String {
         panic!("Country code should be 2 characters")
     }
 
-    let regime_char = regime_to_char(regime).to_string();
-
     let mut mrn = format!("{}{}{}", curr_year, capitalize(country_code), random_str);
 
-    // Replace n-1 char with regime char
-    mrn.replace_range(16..17, &regime_char);
+    if let Some(procedure) = procedure {
+        let proctgr_char = procecure_category_to_char(procedure).to_string();
+
+        // Replace n-1 char with regime char
+        mrn.replace_range(16..17, &proctgr_char);
+    }
 
     // Check MRN, and replace last character if invalid
     let last_digit = is_mrn_valid(&mrn);
@@ -61,14 +63,12 @@ fn main() -> Result<(), Box<dyn Error>> {
     let args = Args::parse();
     let country_code = args.country_code;
     let iterations = args.number_of_mrns;
-    let regime = if let Some(regime_str) = args.regime {
-        Some(Regime::from_str(&regime_str)?)
-    } else {
-        None
-    };
+
+    let combined = args.combined;
+    let procedure = args.procedure_category.map(|proctg| match_procedure(&proctg, combined.as_deref()));
 
     for _ in 0..iterations {
-        let mrn: &str = &generate_random_mrn(&country_code, regime);
+        let mrn: &str = &generate_random_mrn(&country_code, procedure);
         println!("{mrn}");
     }
 
@@ -82,15 +82,27 @@ mod tests {
 
     #[test]
     fn generate_random_mrn_test() {
-        let mrn = generate_random_mrn("DK", Some(Regime::IMPORT));
+        let mrn = generate_random_mrn("DK", Some(Procedure::ExportOnly));
 
         let country_code: String = mrn.chars().skip(2).take(2).collect();
         let actual_year: String = mrn.chars().take(2).collect();
         let expected_year: String = Utc::now().year().to_string().chars().skip(2).collect();
-        let regime_char: char = mrn.chars().nth(16).unwrap();
+        let procedure_char: char = mrn.chars().nth(16).unwrap();
         assert_eq!(18, mrn.len());
         assert_eq!(expected_year, actual_year);
-        assert_eq!('I', regime_char);
+        assert_eq!('A', procedure_char);
+        assert_eq!("DK".to_string(), country_code);
+    }
+
+    #[test]
+    fn generate_random_mrn_test_without_procedure() {
+        let mrn = generate_random_mrn("DK", None);
+
+        let country_code: String = mrn.chars().skip(2).take(2).collect();
+        let actual_year: String = mrn.chars().take(2).collect();
+        let expected_year: String = Utc::now().year().to_string().chars().skip(2).collect();
+        assert_eq!(18, mrn.len());
+        assert_eq!(expected_year, actual_year);
         assert_eq!("DK".to_string(), country_code);
     }
 
