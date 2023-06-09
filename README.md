@@ -49,7 +49,7 @@ Options:
 - -c, --country-code <COUNTRY_CODE>              Country code of MRN
 - -n, --number-of-mrns <NUMBER_OF_MRNS>          Number of MRNs to generate [default: 1]
 - -p, --procedure-category <PROCEDURE_CATEGORY>  Procedure category
-- -C, --combined <COMBINED>                      Combined procedure category
+- -C, --combined \<COMBINED\>                      Combined procedure category
 - -h, --help                                     Print help
 - -V, --version                                  Print version
   
