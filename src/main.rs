@@ -9,12 +9,14 @@ use parser::Args;
 use rand::{distributions::Alphanumeric, prelude::Distribution};
 
 /// Returns a valid MRN given a country code
-fn generate_random_mrn(country_code: &str, procedure: Option<Procedure>) -> String {
+fn generate_random_mrn(country_code: &str, procedure: Option<Procedure>, declaration_office: Option<&str>) -> String {
     let curr_year: String = Utc::now().year().to_string().chars().skip(2).collect();
+
+    let random_str_len = 14 - declaration_office.map_or(0, |decoffice| decoffice.len());
 
     let random_str: String = Alphanumeric
         .sample_iter(&mut rand::thread_rng())
-        .take(14)
+        .take(random_str_len)
         .map(|c| c.to_ascii_uppercase() as char)
         .collect();
 
@@ -22,7 +24,7 @@ fn generate_random_mrn(country_code: &str, procedure: Option<Procedure>) -> Stri
         panic!("Country code should be 2 characters")
     }
 
-    let mut mrn = format!("{}{}{}", curr_year, capitalize(country_code), random_str);
+    let mut mrn = format!("{}{}{}{}", curr_year, capitalize(country_code), declaration_office.unwrap_or(""), random_str);
 
     if let Some(procedure) = procedure {
         let proctgr_char = procecure_category_to_char(procedure).to_string();
@@ -63,12 +65,13 @@ fn main() -> Result<(), Box<dyn Error>> {
     let args = Args::parse();
     let country_code = args.country_code;
     let iterations = args.number_of_mrns;
+    let declaration_office = args.declaration_office.as_deref();
 
     let combined = args.combined;
     let procedure = args.procedure_category.map(|proctg| match_procedure(&proctg, combined.as_deref()));
 
     for _ in 0..iterations {
-        let mrn: &str = &generate_random_mrn(&country_code, procedure);
+        let mrn: &str = &generate_random_mrn(&country_code, procedure, declaration_office);
         println!("{mrn}");
     }
 
@@ -82,7 +85,7 @@ mod tests {
 
     #[test]
     fn generate_random_mrn_test() {
-        let mrn = generate_random_mrn("DK", Some(Procedure::ExportOnly));
+        let mrn = generate_random_mrn("DK", Some(Procedure::ExportOnly), None);
 
         let country_code: String = mrn.chars().skip(2).take(2).collect();
         let actual_year: String = mrn.chars().take(2).collect();
@@ -92,11 +95,12 @@ mod tests {
         assert_eq!(expected_year, actual_year);
         assert_eq!('A', procedure_char);
         assert_eq!("DK".to_string(), country_code);
+        assert_eq!(None, is_mrn_valid(&mrn));
     }
 
     #[test]
     fn generate_random_mrn_test_without_procedure() {
-        let mrn = generate_random_mrn("DK", None);
+        let mrn = generate_random_mrn("DK", None, None);
 
         let country_code: String = mrn.chars().skip(2).take(2).collect();
         let actual_year: String = mrn.chars().take(2).collect();
@@ -104,6 +108,22 @@ mod tests {
         assert_eq!(18, mrn.len());
         assert_eq!(expected_year, actual_year);
         assert_eq!("DK".to_string(), country_code);
+        assert_eq!(None, is_mrn_valid(&mrn));
+    }
+
+    #[test]
+    fn generate_random_mrn_test_with_declaration_office() {
+        let mrn = generate_random_mrn("DK", None, Some("004700"));
+
+        let country_code: String = mrn.chars().skip(2).take(2).collect();
+        let actual_year: String = mrn.chars().take(2).collect();
+        let declaration_office: String = mrn.chars().skip(4).take(6).collect();
+        let expected_year: String = Utc::now().year().to_string().chars().skip(2).collect();
+        assert_eq!(18, mrn.len());
+        assert_eq!(expected_year, actual_year);
+        assert_eq!("DK".to_string(), country_code);
+        assert_eq!("004700".to_string(), declaration_office);
+        assert_eq!(None, is_mrn_valid(&mrn));
     }
 
     #[test]

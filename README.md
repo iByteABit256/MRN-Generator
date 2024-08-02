@@ -50,18 +50,22 @@ Options:
 - -n, --number-of-mrns <NUMBER_OF_MRNS>          Number of MRNs to generate [default: 1]
 - -p, --procedure-category <PROCEDURE_CATEGORY>  Procedure category
 - -C, --combined \<COMBINED\>                      Combined procedure category
+- -o, --declaration-office <DECLARATION_OFFICE>  Customs office of declaration
 - -h, --help                                     Print help
 - -V, --version                                  Print version
   
 ### Examples
 ```mrn-generator -c DK``` to generate an MRN with Denmark as a country code
 
+```mrn-generator -c DK -o 004700``` to generate an MRN with Denmark as a country code and 004700
+as the declaration office
+
 ```mrn-generator -c NL -n 20``` to generate 20 MRNs with Netherlands as a country code
 
-```mrn-generator -c NL -n 20 -P B1``` to generate 20 MRNs with Netherlands as a country code
+```mrn-generator -c NL -n 20 -p B1``` to generate 20 MRNs with Netherlands as a country code
 and B1 procedure category
 
-```mrn-generator -c NL -n 20 -P B1 -C A``` to generate 20 MRNs with Netherlands as a country code
+```mrn-generator -c NL -n 20 -p B1 -C A``` to generate 20 MRNs with Netherlands as a country code
 and B1 procedure category combined with A* procedure category
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>

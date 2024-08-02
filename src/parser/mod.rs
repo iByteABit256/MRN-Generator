@@ -19,4 +19,8 @@ pub struct Args {
     /// Combined procedure category
     #[arg(short = 'C', long)]
     pub combined: Option<String>,
+
+    /// Customs office of declaration
+    #[arg(short = 'o', long)]
+    pub declaration_office: Option<String>,
 }
