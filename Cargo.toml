@@ -1,6 +1,6 @@
 [package]
 name = "mrn-generator"
-version = "0.3.0"
+version = "0.3.1"
 edition = "2021"
 authors = ["Pavlos Smith <paulsmith4561+at+gmail.com>"]
 
