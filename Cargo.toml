@@ -10,3 +10,4 @@ authors = ["Pavlos Smith <paulsmith4561+at+gmail.com>"]
 chrono = "0.4.23"
 rand = "0.8.5"
 clap = { version = "4.0.29", features = ["derive"] }
+thiserror = "1.0.63"
