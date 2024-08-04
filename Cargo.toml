@@ -1,9 +1,9 @@
 [package]
 name = "mrn-generator"
-version = "0.3.1"
+version = "0.3.2"
 edition = "2021"
 authors = ["Pavlos Smith <paulsmith4561+at+gmail.com>"]
-description = "A library for generating valid MRNs based on ISO 6346"
+description = "A crate for generating valid MRNs based on ISO 6346"
 license = "MIT"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html

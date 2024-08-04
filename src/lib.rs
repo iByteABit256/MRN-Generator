@@ -18,6 +18,14 @@ pub enum MrnGeneratorError {
 }
 
 /// Returns a valid MRN given a country code
+/// 
+/// ## Example
+/// ```
+/// use mrn_generator::generate_random_mrn; 
+/// 
+/// let mrn = generate_random_mrn("DK", None, Some("004700")).unwrap();
+/// println!("{mrn}");
+/// ```
 pub fn generate_random_mrn(
     country_code: &str,
     procedure: Option<Procedure>,
@@ -65,6 +73,14 @@ pub fn generate_random_mrn(
 }
 
 /// Returns None if MRN is valid, and correct last character if it's invalid
+/// 
+/// ## Example
+/// ```
+/// use mrn_generator::{generate_random_mrn, is_mrn_valid}; 
+/// 
+/// let mrn = generate_random_mrn("DK", None, Some("004700")).unwrap();
+/// assert_eq!(None, is_mrn_valid(&mrn).unwrap());
+/// ```
 pub fn is_mrn_valid(mrn: &str) -> Result<Option<char>, MrnGeneratorError> {
     let mut mrn_iter = mrn.chars();
     let last_digit = mrn_iter.next_back().unwrap();
@@ -180,12 +196,12 @@ pub fn match_procedure(
 }
 
 /// Capitalizes string
-pub fn capitalize(s: &str) -> String {
+fn capitalize(s: &str) -> String {
     s.chars().map(|c| c.to_ascii_uppercase()).collect()
 }
 
 /// Replaces last character of string with new character
-pub fn replace_last_char(s: &str, c: char) -> String {
+fn replace_last_char(s: &str, c: char) -> String {
     let mut new_str = s.to_string();
     new_str.pop();
     new_str.push(c);
@@ -218,7 +234,6 @@ pub fn check_character_value(c: char) -> Result<u8, MrnGeneratorError> {
         }
     }
 
-    // Default as fallback, change to an error sometime
     Err(MrnGeneratorError::NotAlphanumeric(c))
 }
 
