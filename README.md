@@ -25,6 +25,8 @@
 
 This is a command line utility to generate MRNs conforming to [ISO 6346](https://en.wikipedia.org/wiki/ISO_6346)
 
+There is also a [GUI version](https://github.com/iByteABit256/MRN-Generator-UI) available.
+
 <!-- GETTING STARTED -->
 ## Getting Started
 
@@ -37,8 +39,6 @@ To build the project locally you will need to [Install Rust](https://www.rust-la
 ```cargo build``` for a development build
 
 ```cargo build --release``` for a release build
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- USAGE EXAMPLES -->
 ## Usage
@@ -68,14 +68,10 @@ and B1 procedure category
 ```mrn-generator -c NL -n 20 -p B1 -C A``` to generate 20 MRNs with Netherlands as a country code
 and B1 procedure category combined with A* procedure category
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 <!-- LICENSE -->
 ## License
 
 Distributed under the MIT License. See `LICENSE.txt` for more information.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- CONTACT -->
 ## Contact
